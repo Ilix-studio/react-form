@@ -1,24 +1,55 @@
 import { Button, List, ListItem, TextField, Typography } from "@mui/material";
 import Link from "next/link";
 import React from "react";
-import NextLink from 'next/link'
+import NextLink from "next/link";
 import { useForm, Controller } from "react-hook-form";
 import Form from "../components/Form";
 
-const LoginScreen = () => {
+const RegisterScreen = () => {
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm();
-  const submitHandler = async ({email, password}) => {};
+  const submitHandler = async ({name, email, password, confirmPassword}) => {};
   return (
     <div>
       <Form onSubmit={handleSubmit(submitHandler)}>
         <Typography component="h5" variant="h5">
-          Login
+          Register
         </Typography>
         <List>
+          <ListItem>
+            <Controller
+              name="name"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: true,
+                minLength: 2,
+              }}
+              //   render is a function accept field
+              render={({ field }) => (
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  id="name"
+                  label="Name"
+                  inputProps={{ type: "name" }}
+                  error={Boolean(errors.name)}
+                  helperText={
+                    errors.name
+                      ? errors.name.type === "minLength"
+                        ? "Name length is more than 1"
+                        : "Name is required"
+                      : ""
+                  }
+                  {...field}
+                ></TextField>
+              )}
+            ></Controller>
+          </ListItem>
+
           <ListItem>
             <Controller
               name="email"
@@ -49,6 +80,7 @@ const LoginScreen = () => {
               )}
             ></Controller>
           </ListItem>
+
           <ListItem>
             <Controller
               name="password"
@@ -78,16 +110,47 @@ const LoginScreen = () => {
               )}
             ></Controller>
           </ListItem>
+
+          <ListItem>
+            <Controller
+              name="confirmPassword"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: true,
+                minLength: 6,
+              }}
+              render={({ field }) => (
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  id="confirmPassword"
+                  label="Confirm Password"
+                  inputProps={{ type: "password" }}
+                  error={Boolean(errors.confirmPassword)}
+                  helperText={
+                    errors.confirmPassword
+                      ? errors.confirmPassword.type === "minLength"
+                        ? "Confirm Password length is more than 5"
+                        : "Confirm Password is required"
+                      : ""
+                  }
+                  {...field}
+                ></TextField>
+              )}
+            ></Controller>
+          </ListItem>
+
           <ListItem>
             <Button variant="contained" type="submit" fullWidth color="primary">
-              Login
+              Register 
             </Button>
           </ListItem>
           <ListItem>
-            Do not have an account? {''}
-            <NextLink href={'/register'} passHref>
+            Already have an account?{' '}
+            <NextLink href={'/login'} passHref>
                 <Link >
-               <u>  Register </u>
+               <u>  Login  </u>
                 </Link>
             </NextLink>
           </ListItem>
@@ -97,4 +160,4 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default RegisterScreen;
